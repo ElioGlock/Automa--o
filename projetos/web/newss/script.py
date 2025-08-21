@@ -73,11 +73,9 @@ class Site:
                 h2 = new_bbc.text
                 link = new_bbc.get("href")
                 if len(h2) > 33:
-                    if "https://www.bbc.com/news" in link:
-                        dict__options_bbc_news[h2] = link
-                    else:
-                        dict__options_bbc_news[h2] = f"https://www.bbc.com/news{link}"
-                        
+                    new_key = h2.split(".")[0]
+                    dict__options_bbc_news[new_key] =  link
+                    
             # for k,v in dict__options_bbc_news.items():
             #     print(f"{k}:{v}\n")
             self.news = dict__options_bbc_news
@@ -97,14 +95,16 @@ class Site:
                 h2 = new_bbc.text
                 link = new_bbc.get("href")
                 if len(h2) > 33:
-                    if "https://www.bbc.com/innovation" in link:
-                        dict__options_bbc_tech[h2] = link
-                    else:
-                        dict__options_bbc_tech[h2] = f"https://www.bbc.com/innovation{link}"
+                    new_key = h2.split(".")[0]
+                    dict__options_bbc_tech[new_key] = link
                         
             # for k,v in dict__options_bbc_tech.items():
             #     print(f"{k}:{v}\n")
             self.news = dict__options_bbc_tech
+            
+            
+# teste = Site("bbc_tech")
+# teste.update_news()
         
 
 

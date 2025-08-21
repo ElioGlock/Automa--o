@@ -40,7 +40,7 @@ class News_get:
         
         
     def update_news(self):
-        
+        elementos_vistos = set()
         while not self.kill:
             print("update")
             for site in self.all_sites:
@@ -63,8 +63,21 @@ class News_get:
                          self.news.insert(0,dict_aux)
             self.news = sorted(self.news, key =lambda d:d["data"], reverse= True)
             self._update_file(self.news,"news")
-           
-            time.sleep(15)       
+            
+            self.filtered_news = [i for i in self.news if i["fonte"] == "cnn_news"]
+            self.filter_more_news = [i["materia"] for i in self.filtered_news]
+            
+            for elemento in self.filter_more_news:
+                if elemento not in elementos_vistos:
+                    elementos_vistos.add(elemento)
+                    print(elemento)
+                       
+            
+            time.sleep(15)
+            
+
+        
+        
         
 class App_news(tk.Tk,News_get):
     def __init__(self):
@@ -181,7 +194,7 @@ if __name__ == "__main__":
     
     
     app.mainloop()
-    news.update_news()
+    news.filter_news()
     
     
     
