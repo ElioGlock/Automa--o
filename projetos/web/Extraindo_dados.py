@@ -19,7 +19,7 @@ state = scrapping_uf("sp")
 for indicator in state:
     if ']' in state[indicator]:
         state[indicator] = state[indicator].split(']')[0][:-8]
-    else:
+    else: 
         state[indicator] =  state[indicator]
     # print(indicator,state[indicator])
     

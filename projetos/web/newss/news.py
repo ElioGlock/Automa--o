@@ -40,7 +40,6 @@ class News_get:
         
         
     def update_news(self):
-        elementos_vistos = set()
         while not self.kill:
             print("update")
             for site in self.all_sites:
@@ -63,15 +62,6 @@ class News_get:
                          self.news.insert(0,dict_aux)
             self.news = sorted(self.news, key =lambda d:d["data"], reverse= True)
             self._update_file(self.news,"news")
-            
-            self.filtered_news = [i for i in self.news if i["fonte"] == "cnn_news"]
-            self.filter_more_news = [i["materia"] for i in self.filtered_news]
-            
-            for elemento in self.filter_more_news:
-                if elemento not in elementos_vistos:
-                    elementos_vistos.add(elemento)
-                    print(elemento)
-                       
             
             time.sleep(15)
             
@@ -148,9 +138,8 @@ class PaginaInicial(tk.Frame,tk.Tk):
        
 class bbc_news(tk.Frame,tk.Tk,News_get):
     def __init__(self, parent, controller):
-        
         tk.Frame.__init__(self, parent)
-        
+        self.news_class = News_get()
         self.time_label = ttk.Label(self, text="",
                         anchor="center",
                         font=("Helvetica",14,"bold"),
@@ -161,6 +150,31 @@ class bbc_news(tk.Frame,tk.Tk,News_get):
         
         self.config(background="#364153")
         self.controller = controller
+        
+        
+        self.filtered_news = [i for i in self.news_class.news if i["fonte"] == "bbc_news"]
+        self.filter_more_news = [i["materia"] for i in self.filtered_news]
+        
+        elementos_vistos = set()    
+        for elemento in self.filter_more_news:
+            if elemento not in elementos_vistos:
+                elementos_vistos.add(elemento)
+                               
+            self.news_label = ttk.Label(self, text=f"{elemento}",
+                                font=("Helvetica",8,"bold"),
+                                foreground="white",
+                                background="#364153")
+            self.news_label.pack(pady=1, padx=1,)
+        # for i in self.filter_more_news:
+        #     self.news_label = ttk.Label(self, text="",
+        #                     anchor="center",
+        #                     font=("Helvetica",14,"bold"),
+        #                     foreground="white",
+        #                     background="#364153")
+        #     self.news_label.pack(pady=10, padx=10)
+        #     self.display_news()
+        
+        
         label = ttk.Label(self, text=f"")
         label.pack(pady=10, padx=10)
 
@@ -177,12 +191,16 @@ class bbc_news(tk.Frame,tk.Tk,News_get):
         self.after(15000, self.update_time) 
         
     def display_news(self):
-        self.news_class = News_get()
-        self.news_class.update_news()
-        self.filtered_news = [i for i in self.news_class.news if i["fonte"] in self.news_class.sites]
+        self.filtered_news = [i for i in self.news_class.news if i["fonte"] == "bbc_news"]
+        self.filter_more_news = [i["materia"] for i in self.filtered_news]
         
-        label = ttk.Label(self, text=f"{self.filtered_news}")
-        label.pack(pady=10, padx=10)
+        elementos_vistos = set()    
+        for elemento in self.filter_more_news:
+            if elemento not in elementos_vistos:
+                elementos_vistos.add(elemento)
+                               
+        self.news_label.config(text=f"{elemento}")
+        self.after(15000, self.update_time) 
         
 
 
@@ -194,7 +212,7 @@ if __name__ == "__main__":
     
     
     app.mainloop()
-    news.filter_news()
+    news.update_news()
     
     
     
